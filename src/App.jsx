@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql,
+} from "@apollo/client";
 
-function App() {
-  const [count, setCount] = useState(0)
+const client = new ApolloClient({
+  uri: "https://countries.trevorblades.com/",
+  cache: new InMemoryCache(),
+});
+
+const GET_COUNTRIES = gql`
+  query {
+    countries {
+      code
+      name
+    }
+  }
+`;
+
+function Countries() {
+  const { loading, error, data } = useQuery(GET_COUNTRIES);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error 😢</p>;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ul>
+      {data.countries.slice(0, 10).map((country) => (
+        <li key={country.code}>{country.name}</li>
+      ))}
+    </ul>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <ApolloProvider client={client}>
+      <h1>Countries</h1>
+      <Countries />
+    </ApolloProvider>
+  );
+}
+
+export default App;
