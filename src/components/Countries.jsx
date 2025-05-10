@@ -66,9 +66,19 @@ export default function Countries() {
       {data && (
         <>
           <h2>{data.continent.name}</h2>
-          <ul>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {data.continent.countries.map((country) => (
-              <li key={country.code}>{country.name}</li>
+              <li key={country.code}>
+                <img
+                  width={48}
+                  height={36}
+                  src={`//flagcdn.com/48x36/${country.code.toLowerCase()}.png`}
+                  alt={`${country.name} flag`}
+                  style={{ marginRight: "0.5em", verticalAlign: "middle" }}
+                  loading="lazy"
+                />
+                {country.name}
+              </li>
             ))}
           </ul>
         </>
