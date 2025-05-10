@@ -7,3 +7,4 @@ This is a little example project demonstrating how to use GraphQL, leveraging Ap
 - Clone the repo
 - `npm i`
 - `npm run dev`
+- See the running locally at `localhost:5173`
